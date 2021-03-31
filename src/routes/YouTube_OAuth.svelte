@@ -6,12 +6,12 @@
      */
 
     import { onMount } from "svelte";
-    import "smelte/src/tailwind.css";
+    // import "smelte/src/tailwind.css";
     import Button from "smelte/src/components/Button";
     import Chip from "smelte/src/components/Chip";
     import TextField from "smelte/src/components/TextField";
-    import ChannelDetails from "./ChannelDetails.svelte";
-    import Video from "./Video.svelte";
+    import ChannelDetails from "../components/ChannelDetails.svelte";
+    import Video from "../components/Video.svelte";
 
     import {
         storeVideosList,
@@ -27,9 +27,9 @@
     } from "../../scripts/stores.js";
     import { API_KEY } from "../../scripts/secret_keys.js";
     import { CLIENT_ID } from "../../scripts/secret_keys.js";
-    import PlaylistItem from "./PlaylistItem.svelte";
-    import Playlist from "./Playlist.svelte";
-    import YouTubeItemsForm from "./YouTubeItemsForm.svelte";
+    import PlaylistItem from "../components/PlaylistItem.svelte";
+    import Playlist from "../components/Playlist.svelte";
+    import YouTubeItemsForm from "../components/YouTubeItemsForm.svelte";
     // import colors from 'tailwindcss/colors'
     // let API_KEY = process.env.API_KEY;
     // let CLIENT_ID = process.env.CLIENT_ID;
@@ -44,31 +44,32 @@
 
     let forUsername = "";
     let channelName = "";
-    $: currentDisplayContext = "default";
+    let currentDisplayContext = "default";
     // Options: "Channel Details", "Collection", "Playlist", "Video Details"
     let channelId = "";
-    $: videoId = $storeVideoId;
-    $: channelDetails = {};
-    $: videoDetails = $storeVideoDetails;
+    let videoId = ""
+    let channelDetails = {};
+    let videoDetails = $storeVideoDetails;
     let channelDescription = "";
     let channelThumbnails = {};
-    $: nextPageToken = "";
+    let nextPageToken = "";
     let pageInfo = {};
     // $: playlistsList = lsget("playlistsList")
     let playlistsList
-    $: videosList = []
+    let videosList = []
     let maxResults = 50;
     let videosListData = [];
     // let lookupPart = "snippet";
     let lookupPart = "contentDetails";
-    $: uploadsId = "";
-    $: playlistId = $storePlaylistId;
+    let uploadsId = "";
+    let playlistId = ""
     let pagesOfResults = 0;
     let isAuthorized = false;
 
     onMount(() => {
         // console.log(`tailwind colors: `, colors)
         if (gapiLoaded) {
+            console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapiLoaded`, gapiLoaded)
             console.log(`GAPI loaded`);
             // authenticate().then(loadClient)
             // gapi.load("client:auth2", function () {
@@ -76,10 +77,12 @@
             // });
             handleClientLoad();
         }
+        console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapi🚩🚩NOT Loaded`, gapiLoaded)
+        handleClientLoad();
         loadDataFromLS();
     });
 
-    let unsubscribe = storeVideosList.subscribe((val) => {
+    storeVideosList.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeVideosList ~ onMount ~ val`,
             val
@@ -91,12 +94,14 @@
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeChannelName ~ onMount ~ val`,
             val
         );
+        channelName = val
     });
     storeChannelDetails.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeChannelDetails ~ onMount ~ val`,
             val
         );
+        channelDetails = val
     });
     storeCurrentDisplayContext.subscribe((val) => {
         console.log(
@@ -110,6 +115,7 @@
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeVideoDetails ~ onMount ~ val`,
             val
         );
+        videoDetails = val
     });
     storePlaylistsList.subscribe((val) => {
         console.log(
@@ -125,11 +131,19 @@
         );
         videosList = val
     });
+    storeVideoId.subscribe((val) => {
+        console.log(
+            `🚀📽📽📽 ~ file: YouTube_OAuth.svelte ~ storeVideosList ~ onMount ~ val`,
+            val
+        );
+        videoId = val
+    });
     storePlaylistId.subscribe(val => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storePlaylistId ~ onMount ~ val`,
             val
         );
+        playlistId = val
     })
 
     function lsget(item) {
@@ -167,6 +181,7 @@
     var GoogleAuth;
     var SCOPE = "https://www.googleapis.com/auth/youtube.readonly";
     function handleClientLoad() {
+        console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 170 ~ handleClientLoad ~ handleClientLoad`)
         // Load the API's client and auth2 modules.
         // Call the initClient function after the modules load.
         gapi.load("client:auth2", initClient);
@@ -247,7 +262,7 @@
         src="https://apis.google.com/js/api.js"
         on:load={handleClientLoad}></script>
 </svelte:head>
-<div>
+<div class="relative">
     <h3 class="center">YouTube OAuth Flow</h3>
     <div class="absolute top-10 right-20">
         {#if isAuthorized}

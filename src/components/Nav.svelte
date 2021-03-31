@@ -70,7 +70,7 @@
 		<li><a aria-current="{segment === 'tooltip' ? 'page' : undefined}" href="tooltip">tooltip</a></li>
 		<li><a aria-current="{segment === 'treeview' ? 'page' : undefined}" href="treeview">treeview</a></li>
 		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
-		<li><a aria-current="{segment === 'YouTube_OAuth' ? 'page' : undefined}" href="yt_sample">YouTube</a></li>
+		<li><a aria-current="{segment === 'YouTube_OAuth' ? 'page' : undefined}" href="YouTube_OAuth">YouTube</a></li>
 
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->

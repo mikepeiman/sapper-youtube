@@ -146,14 +146,17 @@
                     let res = response.result;
                     if (res.items) {
                         setDisplayContext(res);
+                        items = res.items[0];
                         parseResultData(
                             $storeCurrentDisplayContext,
-                            res.items[0]
+                            items
                         );
+
                     } else {
+                        items = []
                         uploadsId = "Channel not found";
                     }
-                    items = res.items[0];
+                    
                     channelDetails = items;
                     console.log("items: ", items);
                     storeChannelName.set(channelName);
@@ -265,7 +268,7 @@
             />
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-4"
+            class="h-14 self-start mt-2 col-start-4 min-h-full"
             on:click={() => searchByChannelName()}>Search</Button
         >
     </div>
