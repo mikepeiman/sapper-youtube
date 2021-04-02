@@ -147,16 +147,12 @@
                     if (res.items) {
                         setDisplayContext(res);
                         items = res.items[0];
-                        parseResultData(
-                            $storeCurrentDisplayContext,
-                            items
-                        );
-
+                        parseResultData($storeCurrentDisplayContext, items);
                     } else {
-                        items = []
+                        items = [];
                         uploadsId = "Channel not found";
                     }
-                    
+
                     channelDetails = items;
                     console.log("items: ", items);
                     storeChannelName.set(channelName);
@@ -197,6 +193,27 @@
                     videoDetails = items;
                     storeVideoDetails.set(videoDetails);
                     console.log("items videoDetails: ", items);
+                    getCommentsFromVideoId(id)
+                },
+                function (err) {
+                    console.error("Execute error", err);
+                }
+            );
+    }
+
+    function getCommentsFromVideoId(id) {
+        console.log(`🚀 ~ file: YouTubeItemsForm.svelte ~ line 205 ~ getCommentsFromVideoId ~ id`, id)
+        let comments = [];
+        return gapi.client.youtube.commentThreads
+            .list({
+                part: ["snippet,replies"],
+                videoId: id,
+            })
+            .then(
+                function (response) {
+                    // Handle the results here (response.result has the parsed body).
+                    console.log("🦜🦜🦜getCommentsFromVideoId Response", response);
+                    comments = response.items
                 },
                 function (err) {
                     console.error("Execute error", err);
@@ -268,7 +285,7 @@
             />
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-4 min-h-full"
+            class="yt-button h-14 self-start mt-2 col-start-4"
             on:click={() => searchByChannelName()}>Search</Button
         >
     </div>
@@ -283,7 +300,7 @@
             />
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-5 col-span-2"
+            class="yt-button h-14 self-start mt-2 col-start-5 col-span-2"
             on:click={() => getPlaylistsByChannelId(channelId)}
             >Get Playlists</Button
         >
@@ -299,7 +316,7 @@
             />
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-4"
+            class="yt-button h-14 self-start mt-2 col-start-4"
             on:click={() => getVideosByPlaylistId(uploadsId)}>Get Videos</Button
         >
     </div>
@@ -315,7 +332,7 @@
             Playlist: {$storePlaylistName}
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-4"
+            class="yt-button h-14 self-start mt-2 col-start-4"
             on:click={() => getVideosByPlaylistId(playlistId)}
             >Get Videos</Button
         >
@@ -331,8 +348,14 @@
             />
         </div>
         <Button
-            class="h-14 self-start mt-2 col-start-4"
+            class="yt-button h-14 self-start mt-2 col-start-4"
             on:click={() => getVideoFromId(videoId)}>Video Details</Button
         >
     </div>
 </div>
+
+<style>
+    .yt-button {
+        min-height: 3.5rem;
+    }
+</style>

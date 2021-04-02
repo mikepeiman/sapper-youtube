@@ -47,7 +47,7 @@
     let currentDisplayContext = "default";
     // Options: "Channel Details", "Collection", "Playlist", "Video Details"
     let channelId = "";
-    let videoId = ""
+    let videoId = "";
     let channelDetails = {};
     let videoDetails = $storeVideoDetails;
     let channelDescription = "";
@@ -55,21 +55,24 @@
     let nextPageToken = "";
     let pageInfo = {};
     // $: playlistsList = lsget("playlistsList")
-    let playlistsList
-    let videosList = []
+    let playlistsList;
+    let videosList = [];
     let maxResults = 50;
     let videosListData = [];
     // let lookupPart = "snippet";
     let lookupPart = "contentDetails";
     let uploadsId = "";
-    let playlistId = ""
+    let playlistId = "";
     let pagesOfResults = 0;
     let isAuthorized = false;
 
     onMount(() => {
         // console.log(`tailwind colors: `, colors)
         if (gapiLoaded) {
-            console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapiLoaded`, gapiLoaded)
+            console.log(
+                `🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapiLoaded`,
+                gapiLoaded
+            );
             console.log(`GAPI loaded`);
             // authenticate().then(loadClient)
             // gapi.load("client:auth2", function () {
@@ -77,7 +80,10 @@
             // });
             handleClientLoad();
         }
-        console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapi🚩🚩NOT Loaded`, gapiLoaded)
+        console.log(
+            `🚀 ~ file: YouTube_OAuth.svelte ~ line 72 ~ onMount ~ gapi🚩🚩NOT Loaded`,
+            gapiLoaded
+        );
         handleClientLoad();
         loadDataFromLS();
     });
@@ -87,21 +93,21 @@
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeVideosList ~ onMount ~ val`,
             val
         );
-        videosList = val
+        videosList = val;
     });
     storeChannelName.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeChannelName ~ onMount ~ val`,
             val
         );
-        channelName = val
+        channelName = val;
     });
     storeChannelDetails.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeChannelDetails ~ onMount ~ val`,
             val
         );
-        channelDetails = val
+        channelDetails = val;
     });
     storeCurrentDisplayContext.subscribe((val) => {
         console.log(
@@ -115,36 +121,36 @@
             `🚀 ~ file: YouTube_OAuth.svelte ~ storeVideoDetails ~ onMount ~ val`,
             val
         );
-        videoDetails = val
+        videoDetails = val;
     });
     storePlaylistsList.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storePlaylistsList ~ onMount ~ val`,
             val
         );
-        playlistsList = val
+        playlistsList = val;
     });
     storeVideosList.subscribe((val) => {
         console.log(
             `🚀📽📽📽 ~ file: YouTube_OAuth.svelte ~ storeVideosList ~ onMount ~ val`,
             val
         );
-        videosList = val
+        videosList = val;
     });
     storeVideoId.subscribe((val) => {
         console.log(
             `🚀📽📽📽 ~ file: YouTube_OAuth.svelte ~ storeVideosList ~ onMount ~ val`,
             val
         );
-        videoId = val
+        videoId = val;
     });
-    storePlaylistId.subscribe(val => {
+    storePlaylistId.subscribe((val) => {
         console.log(
             `🚀 ~ file: YouTube_OAuth.svelte ~ storePlaylistId ~ onMount ~ val`,
             val
         );
-        playlistId = val
-    })
+        playlistId = val;
+    });
 
     function lsget(item) {
         let ls = localStorage.getItem(item);
@@ -179,9 +185,11 @@
     }
 
     var GoogleAuth;
-    var SCOPE = "https://www.googleapis.com/auth/youtube.readonly";
+    var SCOPE = "https://www.googleapis.com/auth/youtube.force-ssl";
     function handleClientLoad() {
-        console.log(`🚀 ~ file: YouTube_OAuth.svelte ~ line 170 ~ handleClientLoad ~ handleClientLoad`)
+        console.log(
+            `🚀 ~ file: YouTube_OAuth.svelte ~ line 170 ~ handleClientLoad ~ handleClientLoad`
+        );
         // Load the API's client and auth2 modules.
         // Call the initClient function after the modules load.
         gapi.load("client:auth2", initClient);
@@ -262,9 +270,9 @@
         src="https://apis.google.com/js/api.js"
         on:load={handleClientLoad}></script>
 </svelte:head>
-<div class="relative">
+<div class="flex justify-center">
     <h3 class="center">YouTube OAuth Flow</h3>
-    <div class="absolute top-10 right-20">
+    <div class="auth-widget absolute top-10 right-20">
         {#if isAuthorized}
             <Button color="secondary" on:click={() => revokeAccess()}
                 >Revoke Access</Button
@@ -274,12 +282,18 @@
             <Button color="blue" on:click={() => handleAuthClick()}
                 >Handle Auth</Button
             >
-            <p>You are not signed in, or not authorized to use this app.</p>
+            <p>Not authorized; please sign in.</p>
         {/if}
     </div>
 </div>
 
-<YouTubeItemsForm {channelName} {channelId} {uploadsId} {playlistId} {videoId} />
+<YouTubeItemsForm
+    {channelName}
+    {channelId}
+    {uploadsId}
+    {playlistId}
+    {videoId}
+/>
 
 <div class="flex flex-wrap justify-start justify-items-start">
     {#if currentDisplayContext == "Channel Details"}
@@ -321,5 +335,9 @@
     }
     .hidden {
         display: none;
+    }
+    .auth-widget {
+        top: 1rem;
+        right: 1rem;
     }
 </style>

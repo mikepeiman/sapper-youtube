@@ -1,5 +1,6 @@
 <script>
     export let videoDetails;
+    import Comments from './Comments.svelte'
 </script>
 
 <div class="playlistItem grid row-start-auto grid-cols-12 m-1">
@@ -18,3 +19,4 @@
         <div>{JSON.stringify(videoDetails.id)}</div>
     </div>
 </div>
+<Comments id={videoDetails.id} />
