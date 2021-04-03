@@ -1,4 +1,6 @@
 import { writable } from 'svelte/store'
+// import { init } from "@lib/mongo"
+// const {db} = await init()
 
 let videosList = writable([])
 let playlistsList = writable([])
@@ -11,6 +13,7 @@ let videoId = writable("")
 let uploadsId = writable("")
 let playlistId = writable("")
 let playlistName = writable("")
+let videoComments = writable([])
 
 export const storeVideosList = {
     subscribe: videosList.subscribe,
@@ -102,3 +105,10 @@ export const storeVideoId = {
 }
 
 
+export const storeVideoComments = {
+    subscribe: videoComments.subscribe,
+    set: val => {
+        localStorage.setItem("videoComments", JSON.stringify(val))
+        videoComments.set(val)
+    }
+}

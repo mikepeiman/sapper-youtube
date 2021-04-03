@@ -12,6 +12,7 @@
     import Button from "smelte/src/components/Button";
     import Chip from "smelte/src/components/Chip";
     import TextField from "smelte/src/components/TextField";
+    // import { get } from '../../scripts/_db.js'
     import {
         storeCurrentDisplayContext,
         storePlaylistsList,
@@ -22,18 +23,23 @@
         storeVideoDetails,
         storeVideosList,
         storePlaylistName,
+        storeVideoComments,
     } from "../../scripts/stores.js";
 
     function handle(e) {
+        console.log(
+            `🚀 ~ file: YouTubeItemsForm.svelte ~ line 29 ~ handle ~ e.keyCode`,
+            e.keyCode
+        );
         if (e.keyCode == 13) {
             e.preventDefault();
-            if (e.target.ariaLabel == "Channel Name") {
+            if (e.target.id == "Channel Name") {
                 searchByChannelName(channelName);
-            } else if (e.target.ariaLabel == "Channel ID") {
+            } else if (e.target.id == "Channel ID") {
                 getPlaylistsByChannelId(channelId);
-            } else if (e.target.ariaLabel == "Uploads ID") {
+            } else if (e.target.id == "Uploads ID") {
                 getVideosByPlaylistId(uploadsId);
-            } else if (e.target.ariaLabel == "Playlist ID") {
+            } else if (e.target.id == "Playlist ID") {
                 getVideosByPlaylistId(playlistId);
             }
         }
@@ -131,6 +137,11 @@
     }
 
     function searchByChannelName() {
+        console.log(
+            `🚀🔎🔎🔎 ~ file: YouTubeItemsForm.svelte ~ line 141 ~ searchByChannelName ~ channelName`,
+            channelName
+        );
+
         videosList = [];
         return gapi.client.youtube.channels
             .list({
@@ -193,7 +204,7 @@
                     videoDetails = items;
                     storeVideoDetails.set(videoDetails);
                     console.log("items videoDetails: ", items);
-                    getCommentsFromVideoId(id)
+                    getCommentsFromVideoId(id);
                 },
                 function (err) {
                     console.error("Execute error", err);
@@ -202,18 +213,34 @@
     }
 
     function getCommentsFromVideoId(id) {
-        console.log(`🚀 ~ file: YouTubeItemsForm.svelte ~ line 205 ~ getCommentsFromVideoId ~ id`, id)
+        console.log(
+            `🚀 ~ file: YouTubeItemsForm.svelte ~ line 225 ~ getCommentsFromVideoId ~ nextPageToken`,
+            nextPageToken
+        );
+        console.log(
+            `🚀 ~ file: YouTubeItemsForm.svelte ~ line 205 ~ getCommentsFromVideoId ~ id`,
+            id
+        );
         let comments = [];
+        let comment = {};
         return gapi.client.youtube.commentThreads
             .list({
-                part: ["snippet,replies"],
+                part: ["id,snippet,replies"],
                 videoId: id,
+                maxResults: 1000,
+                pageToken: nextPageToken,
             })
             .then(
                 function (response) {
                     // Handle the results here (response.result has the parsed body).
-                    console.log("🦜🦜🦜getCommentsFromVideoId Response", response);
-                    comments = response.items
+                    console.log(
+                        "🦜🦜🦜getCommentsFromVideoId Response",
+                        response
+                    );
+                    nextPageToken = response.result.nextPageToken;
+
+                    comments = response.result.items;
+                    storeVideoComments.set(comments);
                 },
                 function (err) {
                     console.error("Execute error", err);

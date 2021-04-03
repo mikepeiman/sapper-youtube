@@ -35,10 +35,7 @@
     // let API_KEY = process.env.API_KEY;
     // let CLIENT_ID = process.env.CLIENT_ID;
     // export let API_KEY, CLIENT_ID
-    console.log(
-        `🚀 ~ file: YouTube_OAuth.svelte ~ line 25 ~ CLIENT_ID ${CLIENT_ID} ~ API_KEY`,
-        API_KEY
-    );
+
 
     let mounted = false,
         gapiLoaded = false;
