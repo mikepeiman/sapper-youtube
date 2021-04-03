@@ -262,8 +262,13 @@
         setSigninStatus();
     }
 
-    let res = {};
-    let items = [];
+    function pagination(event) {
+        let dir = event.detail.dir;
+        console.log(
+            `🚀 ~ file: YouTube_OAuth.svelte ~ line 266 ~ pagination ~ dir `,
+            dir
+        );
+    }
 </script>
 
 <svelte:head>
@@ -298,7 +303,7 @@
 
 <div class="flex justify-center">
     <div class="block">
-        <Pagination />
+        <Pagination on:pagination={pagination} />
     </div>
 </div>
 
@@ -329,7 +334,7 @@
 
 <div class="flex justify-center">
     <div class="block">
-        <Pagination />
+        <Pagination on:pagination={pagination} />
     </div>
 </div>
 
