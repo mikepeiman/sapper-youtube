@@ -30,6 +30,7 @@
     import PlaylistItem from "../components/PlaylistItem.svelte";
     import Playlist from "../components/Playlist.svelte";
     import YouTubeItemsForm from "../components/YouTubeItemsForm.svelte";
+    import Pagination from "../components/Pagination.svelte";
     // import colors from 'tailwindcss/colors'
     // let API_KEY = process.env.API_KEY;
     // let CLIENT_ID = process.env.CLIENT_ID;
@@ -295,7 +296,13 @@
     {videoId}
 />
 
-<div class="flex flex-wrap justify-start justify-items-start">
+<div class="flex justify-center">
+    <div class="block">
+        <Pagination />
+    </div>
+</div>
+
+<div class="results flex flex-wrap justify-start justify-items-start">
     {#if currentDisplayContext == "Channel Details"}
         <ChannelDetails {channelDetails} />
     {/if}
@@ -320,7 +327,21 @@
     {/if}
 </div>
 
+<div class="flex justify-center">
+    <div class="block">
+        <Pagination />
+    </div>
+</div>
+
 <style>
+    .results {
+        background: rgba(0, 55, 200, 0.1);
+        border: 2px solid rgba(0, 55, 200, 0.3);
+        border-radius: 5px;
+        padding: 2rem;
+        margin: 1rem;
+    }
+
     .videoItem {
         margin: 0.25rem;
         cursor: pointer;
